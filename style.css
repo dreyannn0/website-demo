@@ -1,0 +1,384 @@
+:root {
+    --primary: #ff00ff; /* Neon Pink */
+    --secondary: #00ffff; /* Neon Cyan */
+    --tertiary: #39ff14; /* Neon Green */
+    --bg: #090014; /* Deep synthwave dark purple */
+    --surface: rgba(20, 5, 35, 0.85);
+    --text: #ffffff;
+    --sl-cyan: #00bcd4;
+    --sl-purple: #e040fb;
+}
+
+/* 100% Page Fit Rules */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Locks the page from scrolling */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Retro Grid Background */
+body::before {
+    content: "";
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background-image: 
+        linear-gradient(rgba(255, 0, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: -2;
+}
+
+/* Scanline Overlay */
+body::after {
+    content: "";
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 3px 100%;
+    z-index: 999;
+    pointer-events: none;
+}
+
+header {
+    position: relative;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    text-align: center;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+h1 {
+    font-family: 'Press Start 2P', monospace;
+    color: #fff;
+    font-size: 2.5rem;
+    margin: 0 0 5px 0;
+    text-transform: uppercase;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--primary), 0 0 40px var(--primary);
+    animation: pulsate 1.5s infinite alternate;
+}
+
+@keyframes pulsate {
+    100% { text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px var(--primary), 0 0 40px var(--primary), 0 0 80px var(--primary); }
+    0% { text-shadow: 0 0 2px #fff, 0 0 4px #fff, 0 0 6px var(--primary), 0 0 10px var(--primary), 0 0 45px var(--primary); }
+}
+
+header p {
+    font-family: 'Press Start 2P', monospace; color: var(--secondary); font-size: 0.7rem; text-shadow: 0 0 10px var(--secondary); letter-spacing: 2px; margin: 0;
+}
+
+.back-btn {
+    position: absolute; top: 15px; left: 15px;
+    background: rgba(0,0,0,0.6); border: 2px solid var(--secondary); color: var(--secondary);
+    font-family: 'Press Start 2P', monospace; font-size: 0.6rem; padding: 10px 15px; border-radius: 5px;
+    cursor: pointer; transition: all 0.3s; box-shadow: 0 0 10px var(--secondary), inset 0 0 5px var(--secondary);
+    z-index: 100;
+}
+.back-btn:hover { background: var(--secondary); color: #000; box-shadow: 0 0 20px var(--secondary); }
+
+h2 { font-family: 'Press Start 2P', monospace; color: var(--tertiary); text-shadow: 0 0 10px var(--tertiary); text-align: center; font-size: 1.2rem; margin: 0 0 15px 0; width: 100%; }
+
+/* --- CIRCULAR TILE MENU STYLES --- */
+.menu-container {
+    display: none; 
+    position: relative;
+    width: 500px;
+    height: 500px;
+    margin: 20px auto 50px auto;
+    z-index: 10;
+    flex-shrink: 0;
+    border-radius: 50%;
+}
+.menu-container.active { 
+    display: block; 
+}
+
+/* Central Hub styling */
+.menu-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,255,255,0.15) 0%, transparent 70%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Press Start 2P', monospace; font-size: 0.8rem; line-height: 1.5;
+    color: var(--secondary); text-align: center; text-shadow: 0 0 10px var(--secondary);
+    border: 2px dashed rgba(0, 255, 255, 0.3);
+    animation: pulseRing 2s infinite alternate;
+    user-select: none; pointer-events: none;
+}
+
+@keyframes pulseRing {
+    0% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.1); transform: translate(-50%, -50%) scale(0.95); }
+    100% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.4); transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* Round Game Tiles */
+.game-tile {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 130px; height: 130px;
+    margin-top: -65px; margin-left: -65px; /* Perfect centering offset */
+    border-radius: 50%; /* Makes them perfectly round */
+    background-color: rgba(0,0,0,0.85);
+    padding: 10px; box-sizing: border-box; text-align: center;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 3px solid; backdrop-filter: blur(5px);
+
+    /* Circular Math Logic */
+    --radius: 200px;
+    transform: rotate(var(--angle)) translate(var(--radius)) rotate(calc(var(--angle) * -1)) scale(var(--scale, 1));
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.game-tile:hover {
+    --scale: 1.15;
+    z-index: 100;
+}
+
+.tile-icon { font-size: 2.8rem; margin-bottom: 8px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); transition: transform 0.3s ease; }
+.game-tile:hover .tile-icon { transform: scale(1.1) rotate(5deg); }
+.tile-title { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: #fff; text-shadow: 0 0 5px #fff; line-height: 1.4; }
+
+/* Orbital Angles (360deg / 5 items = 72deg offsets) */
+.tile-1 { --angle: -90deg; border-color: var(--primary); box-shadow: 0 0 15px rgba(255,0,255,0.4), inset 0 0 10px rgba(255,0,255,0.2); }
+.tile-1:hover { background-color: rgba(255,0,255,0.15); box-shadow: 0 0 25px var(--primary), inset 0 0 15px var(--primary); }
+
+.tile-2 { --angle: -18deg; border-color: var(--secondary); box-shadow: 0 0 15px rgba(0,255,255,0.4), inset 0 0 10px rgba(0,255,255,0.2); }
+.tile-2:hover { background-color: rgba(0,255,255,0.15); box-shadow: 0 0 25px var(--secondary), inset 0 0 15px var(--secondary); }
+
+.tile-3 { --angle: 54deg; border-color: var(--tertiary); box-shadow: 0 0 15px rgba(57,255,20,0.4), inset 0 0 10px rgba(57,255,20,0.2); }
+.tile-3:hover { background-color: rgba(57,255,20,0.15); box-shadow: 0 0 25px var(--tertiary), inset 0 0 15px var(--tertiary); }
+
+.tile-4 { --angle: 126deg; border-color: #ff0055; box-shadow: 0 0 15px rgba(255,0,85,0.4), inset 0 0 10px rgba(255,0,85,0.2); }
+.tile-4:hover { background-color: rgba(255,0,85,0.15); box-shadow: 0 0 25px #ff0055, inset 0 0 15px #ff0055; }
+
+.tile-5 { --angle: 198deg; border-color: var(--sl-purple); box-shadow: 0 0 15px rgba(224,64,251,0.4), inset 0 0 10px rgba(224,64,251,0.2); }
+.tile-5:hover { background-color: rgba(224,64,251,0.15); box-shadow: 0 0 25px var(--sl-purple), inset 0 0 15px var(--sl-purple); }
+
+/* Responsive scaling for mobile devices */
+@media (max-width: 600px) {
+    .menu-container { width: 320px; height: 320px; margin-top: 10px; }
+    .menu-center { width: 100px; height: 100px; font-size: 0.6rem; }
+    .game-tile { 
+        --radius: 135px; width: 100px; height: 100px; 
+        margin-top: -50px; margin-left: -50px; border-width: 2px;
+    }
+    .tile-icon { font-size: 2rem; margin-bottom: 5px; }
+    .tile-title { font-size: 0.45rem; }
+}
+
+/* Game Containers locked in flex area */
+.game-container {
+    display: none; background-color: transparent; width: 100%; max-width: 1000px;
+    flex: 1; overflow-y: auto; padding: 10px 20px 40px 20px; box-sizing: border-box; z-index: 10;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+.game-container::-webkit-scrollbar { display: none; /* Hide scrollbar Chrome/Safari */ }
+.game-container.active { display: flex; flex-direction: column; align-items: center; }
+
+canvas { background-color: #000; border: 2px solid #333; max-width: 100%; object-fit: contain; }
+
+/* Dynamic Height Canvas Constraints */
+#snakeCanvas, #slCanvas { max-height: calc(100vh - 200px); width: auto; aspect-ratio: 1 / 1; }
+#tetrisCanvas { max-height: calc(100vh - 180px); width: auto; aspect-ratio: 240 / 400; }
+.ark-container-wrap { 
+    position: relative; width: 100%; max-width: 500px; max-height: calc(100vh - 180px); aspect-ratio: 3 / 4;
+    background: #000; box-shadow: 0 0 20px var(--secondary), inset 0 0 20px var(--secondary);
+    border: 2px solid var(--secondary); border-radius: 5px; overflow: hidden; margin: 10px 0;
+}
+
+/* Fullscreen Rules
+   Class-based (.fs-active) so native fullscreen in every browser and the CSS fallback
+   (.pseudo-fs, used where the API is missing) share one set of rules. */
+:fullscreen { background-color: var(--bg); }
+:-webkit-full-screen { background-color: var(--bg); }
+.game-container.fs-active {
+    max-width: 100%; width: 100vw; height: 100vh; height: 100dvh; margin: 0; padding: 16px;
+    display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+    box-sizing: border-box; background-color: var(--bg); overflow: auto; border: none; box-shadow: none;
+}
+/* Overflow-safe vertical centring: the two spacers share leftover space, and shrink to 0 when the content is
+   taller than the screen, so the top is never cut off (plain justify-content:center clips it, unscrollably). */
+.game-container.fs-active::before, .game-container.fs-active::after { content: ''; flex: 1 0 0; min-height: 0; }
+.game-container.pseudo-fs { position: fixed; top: 0; left: 0; z-index: 990; }
+.game-container.fs-active > h2,
+.game-container.fs-active > details.game-info-text,
+.game-container.fs-active .sl-header h2,
+.game-container.fs-active .btn-fullscreen { display: none !important; }
+
+.fs-exit-btn { display: none; }
+.fs-active .fs-exit-btn {
+    display: block; position: fixed; top: 10px; right: 10px; z-index: 900; opacity: 0.7;
+    font-family: 'Press Start 2P', monospace; font-size: 0.6rem; padding: 10px 12px; cursor: pointer;
+    background: rgba(0,0,0,0.7); color: #ff0055; border: 2px solid #ff0055; border-radius: 5px; box-shadow: 0 0 10px #ff0055;
+}
+.fs-active .fs-exit-btn:hover { opacity: 1; background: #ff0055; color: #fff; }
+
+/* Per-game scaling: explicit sizes derived from the viewport so nothing depends on intrinsic canvas size */
+.fs-active #snakeCanvas { max-height: none; height: auto; width: min(calc(100vh - 270px), calc(100vw - 110px)); }
+.fs-active .nokia-header { max-width: none; }
+.fs-active #slCanvas { max-height: none; height: auto; width: min(80vh, 60vw); }
+.fs-active #tetrisCanvas { max-height: none; width: auto; height: max(240px, min(88vh, calc((100vw - 320px) / 0.6))); }
+.fs-active .ark-container-wrap { max-height: none; max-width: none; margin: 0; width: min(calc(94vh * 0.75), 96vw); }
+.fs-active .ttt-layout { transform: scale(1.3); margin-top: 5vh; }
+@media (max-width: 768px) {
+    .fs-active .ttt-layout { transform: none; margin-top: 0; }
+    .fs-active #slCanvas { width: min(60vh, 92vw); }
+    .fs-active #tetrisCanvas { height: max(240px, min(56vh, 120vw)); }
+}
+
+/* Collapsible Game Info Text */
+details.game-info-text {
+    max-width: 800px; background-color: rgba(0, 0, 0, 0.8); padding: 10px 25px; border-radius: 8px;
+    margin: 10px 0; width: 100%; box-sizing: border-box; border-left: 4px solid var(--secondary);
+    box-shadow: 0 0 10px rgba(0,255,255,0.2); transition: all 0.3s;
+}
+details.game-info-text summary {
+    color: var(--secondary); font-family: 'Press Start 2P', monospace; font-size: 0.7rem; cursor: pointer;
+    outline: none; text-shadow: 0 0 5px var(--secondary); padding: 5px 0; user-select: none;
+}
+details.game-info-text p, details.game-info-text ul, details.game-info-text ol { font-size: 0.9rem; color: #ddd; margin-top: 15px; line-height: 1.6;}
+details.game-info-text li { margin-bottom: 8px; }
+details.game-info-text strong { color: var(--primary); text-shadow: 0 0 5px var(--primary); }
+
+/* Shared Buttons & Modals */
+.start-btn { margin-top: 15px; width: 220px; padding: 15px; font-size: 1rem; font-family: 'Press Start 2P', monospace; background-color: transparent; color: var(--tertiary); border: 2px solid var(--tertiary); border-radius: 5px; cursor: pointer; box-shadow: 0 0 10px var(--tertiary), inset 0 0 10px var(--tertiary); transition: all 0.3s; }
+.start-btn:hover { background-color: var(--tertiary); color: #000; box-shadow: 0 0 20px var(--tertiary), inset 0 0 20px var(--tertiary); }
+.btn-reset-all { font-family: 'Press Start 2P', monospace; background: none; border: none; color: #888; cursor: pointer; font-size: 0.8rem; padding: 5px; text-shadow: 0 0 5px #888; }
+.btn-reset-all:hover { color: #fff; text-shadow: 0 0 10px #fff; }
+.btn-fullscreen { font-family: 'Press Start 2P', monospace; margin-top: 15px; background: none; border: none; color: var(--secondary); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.8rem; text-shadow: 0 0 5px var(--secondary);}
+.btn-fullscreen:hover { color: #fff; text-shadow: 0 0 10px #fff; }
+
+select, input { background-color: #000; color: var(--secondary); border: 2px solid var(--primary); padding: 8px 15px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; border-radius: 5px; font-weight: bold; box-shadow: 0 0 10px var(--primary); }
+input { cursor: text; margin-bottom: 10px; }
+select { margin-left: 5px; margin-right: 15px; }
+
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+.modal.show { display: flex; }
+.modal-content { background-color: #0d001a; padding: 30px; border-radius: 10px; text-align: center; border: 3px solid var(--primary); box-shadow: 0 0 30px var(--primary), inset 0 0 20px var(--primary); min-width: 300px; max-width:90%;}
+.modal-content h2 { font-family: 'Press Start 2P', monospace; margin-top: 0; color: var(--secondary); line-height: 1.6; text-shadow: 0 0 10px var(--secondary); font-size: 1rem;}
+.modal-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+.modal-buttons button { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; background-color: transparent; color: var(--tertiary); border: 2px solid var(--tertiary); box-shadow: 0 0 10px var(--tertiary); padding:15px; border-radius:5px; cursor:pointer; transition: 0.3s;}
+.modal-buttons button:hover { background-color: var(--tertiary); color: #000; box-shadow: 0 0 20px var(--tertiary); }
+.exit-btn { color: #ff0055 !important; border-color: #ff0055 !important; box-shadow: 0 0 10px #ff0055 !important; }
+.exit-btn:hover { background-color: #ff0055 !important; color: #fff !important; box-shadow: 0 0 20px #ff0055 !important; }
+
+#leaderboard-display { margin-top: 20px; text-align: left; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 5px; border: 1px solid var(--secondary);}
+#leaderboard-display h3 { margin-top: 0; color: var(--secondary); text-align: center; font-size: 0.8rem;}
+#leaderboard-list { padding-left: 25px; margin: 0; font-family: 'Press Start 2P', monospace; font-size: 0.6rem; line-height: 2;}
+#leaderboard-list li { margin-bottom: 5px; color: #fff; text-shadow: 0 0 5px #fff;}
+
+/* Tic-Tac-Toe Styles */
+.ttt-controls { margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: var(--secondary); }
+.ttt-layout { display: flex; align-items: center; justify-content: center; gap: 30px; margin: 10px 0; flex-wrap: wrap; }
+.ttt-scoreboard { background-color: rgba(0,0,0,0.8); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px; border: 1px solid var(--secondary); box-shadow: 0 0 15px rgba(0,255,255,0.2); }
+.score-header { font-family: 'Press Start 2P', monospace; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--secondary); font-size: 0.7rem; text-shadow: 0 0 5px var(--secondary); }
+.score-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.score-badge { font-family: 'Press Start 2P', monospace; padding: 6px 10px; border-radius: 6px; font-size: 0.6rem; box-shadow: 0 0 10px currentColor; }
+.score-badge.x { background-color: rgba(255,0,127,0.2); color: var(--primary); border: 1px solid var(--primary); }
+.score-badge.tie { background-color: rgba(255,255,255,0.1); color: #fff; border: 1px solid #fff; }
+.score-badge.o { background-color: rgba(0,255,255,0.2); color: var(--secondary); border: 1px solid var(--secondary); }
+.score-value { font-family: 'Press Start 2P', monospace; font-size: 1rem; text-shadow: 0 0 10px currentColor; }
+.score-value.x { color: var(--primary); }
+.score-value.tie { color: #ffffff; }
+.score-value.o { color: var(--secondary); }
+.ttt-center { display: flex; flex-direction: column; align-items: center; }
+.turn-indicator { font-family: 'Press Start 2P', monospace; padding: 10px 20px; border-radius: 8px; font-size: 0.7rem; margin-bottom: 15px; display: inline-block; transition: background-color 0.3s; border: 1px solid #333;}
+.board-container { background-color: #000; padding: 15px; border-radius: 15px; border: 2px solid var(--primary); box-shadow: 0 0 20px var(--primary); }
+.board { display: grid; grid-template-columns: repeat(3, 80px); grid-gap: 5px; background-color: var(--primary); }
+.cell { width: 80px; height: 80px; background-color: #000; display: flex; justify-content: center; align-items: center; font-size: 3rem; cursor: pointer; transition: background-color 0.2s; font-family: 'Segoe UI', sans-serif; font-weight: bold; }
+.cell:hover { background-color: #111; }
+.mark-x { color: var(--primary); text-shadow: 0 0 15px var(--primary), 0 0 30px var(--primary); }
+.mark-o { color: var(--secondary); text-shadow: 0 0 15px var(--secondary), 0 0 30px var(--secondary); }
+.cell.win-highlight { background-color: #222; box-shadow: inset 0 0 30px rgba(255,255,255,0.2); }
+.ttt-actions { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+.btn-new-game { font-family: 'Press Start 2P', monospace; background-color: transparent; border: 2px solid var(--tertiary); color: var(--tertiary); border-radius: 8px; padding: 12px 15px; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 0 10px var(--tertiary), inset 0 0 10px var(--tertiary); }
+.btn-new-game:hover { background-color: var(--tertiary); color: #000; box-shadow: 0 0 20px var(--tertiary), inset 0 0 20px var(--tertiary); }
+
+/* Nokia Classic Snake Styles */
+.nokia-screen-wrapper { background-color: #8c9b00; padding: 20px; border: 15px solid #1a1a1a; border-radius: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 20px var(--primary); display: flex; flex-direction: column; align-items: center; position: relative; transition: transform 0.3s ease, margin 0.3s ease; }
+.nokia-header { width: 100%; max-width: 400px; display: flex; justify-content: space-between; color: #1a1a1a; font-family: 'Press Start 2P', monospace; font-size: 0.8rem; margin-bottom: 15px; }
+#snakeCanvas { background-color: #9bc400; border: 4px solid #1a1a1a; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); image-rendering: pixelated;}
+
+/* Snake & Ladder Styles */
+.sl-layout { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 10px; width: 100%; }
+.sl-board-section { display: flex; flex-direction: column; align-items: center; }
+.sl-header { margin-bottom: 10px; width:100%; max-width:400px; }
+#slCanvas { background-color: #ffffff; border: 4px solid var(--secondary); border-radius: 8px; box-shadow: 0 0 20px var(--secondary); }
+.sl-panel-section { display: flex; flex-direction: column; gap: 15px; min-width: 250px; align-items: center;}
+.sl-dice-panel { background-color: rgba(0,0,0,0.7); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(255,0,255,0.2); width:100%; box-sizing: border-box;}
+.sl-turn-indicator { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; color: #fff; text-shadow: 0 0 5px #fff; }
+.sl-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block;}
+.sl-dot.p1 { background-color: var(--secondary); box-shadow: 0 0 10px var(--secondary), 0 0 20px var(--secondary);}
+.sl-dot.p2 { background-color: var(--primary); box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);}
+.sl-dice-btn { background: none; border: none; cursor: pointer; padding: 0; margin-bottom: 15px; perspective: 1000px; }
+.sl-dice-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+.dice-face { width: 80px; height: 80px; background: linear-gradient(145deg, #ffffff, #e6e6e6); border-radius: 16px; box-shadow: inset -2px -2px 10px rgba(0,0,0,0.2), 0 0 20px rgba(255,255,255,0.5); display: grid; grid-template-areas: "a b c" "d e f" "g h i"; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 12px; box-sizing: border-box; justify-items: center; align-items: center; transform-style: preserve-3d; }
+.dice-dot { width: 16px; height: 16px; background: #111; border-radius: 50%; box-shadow: inset 0 3px 5px rgba(0,0,0,0.8); }
+@keyframes rollAnimation { 0%{transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);} 20%{transform:rotateX(180deg) rotateY(180deg) rotateZ(90deg) scale(1.1);} 40%{transform:rotateX(360deg) rotateY(270deg) rotateZ(180deg) scale(1.2);} 60%{transform:rotateX(540deg) rotateY(450deg) rotateZ(270deg) scale(1.2);} 80%{transform:rotateX(720deg) rotateY(540deg) rotateZ(360deg) scale(1.1);} 100%{transform:rotateX(1080deg) rotateY(720deg) rotateZ(360deg) scale(1);} }
+.rolling { animation: rollAnimation 0.8s ease-out; }
+#sl-dice-status { font-family: 'Press Start 2P', monospace; color: var(--tertiary); font-size: 0.6rem; text-align: center; max-width: 200px; line-height: 1.6; text-shadow: 0 0 5px var(--tertiary);}
+.sl-player-cards { display: flex; flex-direction: column; gap: 10px; width: 100%; box-sizing: border-box;}
+.sl-card { background-color: rgba(0,0,0,0.7); border-radius: 8px; padding: 15px; border: 2px solid #333; transition: all 0.3s; }
+.sl-card.active { border: 2px solid var(--secondary); box-shadow: 0 0 15px rgba(0,255,255,0.3); }
+.sl-card.active.p2-turn { border: 2px solid var(--primary); box-shadow: 0 0 15px rgba(255,0,255,0.3); }
+.sl-card-header { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.sl-card-title { display: flex; align-items: center; gap: 10px; color: #fff; text-shadow: 0 0 5px #fff;}
+.sl-card-score { color: var(--secondary); font-size: 0.8rem; text-shadow: 0 0 5px var(--secondary);}
+.sl-card-score.p2 { color: var(--primary); text-shadow: 0 0 5px var(--primary); }
+.sl-progress-bar { width: 100%; height: 6px; background-color: #222; border-radius: 3px; overflow: hidden; box-shadow: inset 0 0 5px #000;}
+.sl-progress-fill { height: 100%; width: 0%; transition: width 0.4s ease; box-shadow: 0 0 10px currentColor;}
+.sl-progress-fill.p1 { background-color: var(--secondary); color: var(--secondary); }
+.sl-progress-fill.p2 { background-color: var(--primary); color: var(--primary); }
+.sl-actions { display: flex; flex-direction: column; gap: 5px; align-items: center; margin-top: 5px;}
+
+/* Tetris Styles */
+#tetrisCanvas { border: 4px solid var(--primary); border-radius: 8px; box-shadow: 0 0 20px var(--primary); }
+#holdCanvas { background-color: #000; border: 2px solid var(--secondary); border-radius: 6px; box-shadow: 0 0 10px var(--secondary); }
+
+/* Arkanoid Ultimate Styles */
+.ark-container-wrap { position: relative; width: 100%; max-width: 500px; aspect-ratio: 3 / 4; background: #000; box-shadow: 0 0 20px var(--secondary), inset 0 0 20px var(--secondary); border: 2px solid var(--secondary); border-radius: 5px; overflow: hidden; font-family: 'Press Start 2P', monospace; margin: 10px 0; }
+#arkanoidCanvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; border: none; background: transparent; }
+.ark-container-wrap::after { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%); background-size: 100% 4px; z-index: 10; pointer-events: none; }
+.ark-container-wrap::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: radial-gradient(circle, rgba(0,255,255,0.05) 0%, rgba(0,0,0,0.6) 100%); z-index: 11; pointer-events: none; }
+.ark-ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 20; background: rgba(0, 0, 0, 0.85); text-align: center; padding: 20px; transition: opacity 0.3s ease; }
+.ark-hidden { opacity: 0; pointer-events: none; }
+.ark-ui-layer h1 { font-size: 18px; color: #fff; text-shadow: 0 0 10px var(--secondary), 0 0 20px var(--secondary); margin-bottom: 20px; line-height: 1.6; }
+.ark-ui-layer p { font-size: 8px; line-height: 2; margin-bottom: 25px; color: #ddd; text-shadow: 0 0 5px var(--secondary); }
+.ark-btn { font-family: 'Press Start 2P', monospace; background: transparent; color: var(--secondary); border: 2px solid var(--secondary); padding: 15px 20px; font-size: 10px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 10px var(--secondary), inset 0 0 10px var(--secondary); transition: all 0.2s ease; margin-top: 10px; border-radius: 5px; }
+.ark-btn:hover { background: var(--secondary); color: #000; box-shadow: 0 0 20px var(--secondary), inset 0 0 20px var(--secondary); }
+.ark-controls-hint { margin-top: 30px; font-size: 7px; color: #888; line-height: 1.8; text-shadow: none;}
+#ark-hud { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 5; font-size: 8px; color: var(--secondary); text-shadow: 0 0 5px var(--secondary); pointer-events: none; font-family: 'Press Start 2P', monospace; }
+#ark-level-announcement { position: absolute; top: 40%; left: 0; width: 100%; text-align: center; font-size: 14px; color: var(--tertiary); text-shadow: 0 0 10px var(--tertiary); z-index: 15; pointer-events: none; transition: opacity 1s ease; font-family: 'Press Start 2P', monospace; }
+
+/* --- Settings --- */
+.settings-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); border: 2px solid var(--primary); color: var(--primary); font-size: 1.1rem; line-height: 1; padding: 8px 11px; border-radius: 5px; cursor: pointer; box-shadow: 0 0 10px var(--primary), inset 0 0 5px var(--primary); z-index: 100; transition: all 0.3s; }
+.settings-btn:hover { background: var(--primary); color: #000; }
+.settings-panel { text-align: left; width: 420px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
+.settings-panel h2 { text-align: center; }
+.set-group { border-top: 1px solid rgba(255,255,255,0.15); padding: 12px 0 4px; }
+.set-group h3 { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: var(--tertiary); margin: 0 0 12px; text-shadow: 0 0 6px var(--tertiary); }
+.set-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 0 0 10px; font-size: 0.9rem; }
+.set-row select { margin: 0; padding: 5px 8px; max-width: 180px; }
+.set-row input[type=checkbox] { width: 20px; height: 20px; padding: 0; margin: 0; box-shadow: none; accent-color: var(--primary); }
+.set-row input[type=range] { width: 150px; padding: 0; margin: 0; border: none; background: none; box-shadow: none; accent-color: var(--primary); }
+.set-btn { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; line-height: 1.5; background: transparent; color: var(--secondary); border: 2px solid var(--secondary); border-radius: 5px; padding: 10px; cursor: pointer; }
+.set-btn:hover { background: var(--secondary); color: #000; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.no-scan body::after { display: none; }
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { animation: none !important; transition: none !important; }
+
+/* Arkanoid: keep the 3:4 box exact on short screens. A max-height on a width:100% box used to squash the
+   canvas and skew the mouse-to-paddle mapping. (Fullscreen sizing is handled by .fs-active above.) */
+.ark-container-wrap { max-height: none; width: min(100%, 500px, calc((100vh - 180px) * 0.75)); width: min(100%, 500px, calc((100dvh - 180px) * 0.75)); }
+#arkanoidCanvas { touch-action: none; }

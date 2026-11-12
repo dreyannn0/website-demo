@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnlyFuns - Mini Game Portal</title>
+    <!-- Retro Font for Neon Theme -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <button id="global-back-btn" class="back-btn" onclick="returnToMenu()" style="display:none;">⬅ Back</button>
+        <button id="settings-btn" class="settings-btn" onclick="openSettings()" title="Settings" aria-label="Open settings">⚙</button>
+        <h1>OnlyFuns</h1>
+        <p>Your ultimate classic game portal.</p>
+    </header>
+
+    <!-- NEW HOME MENU DASHBOARD -->
+    <div id="home-menu" class="menu-container active">
+        <!-- Center decorative hub -->
+        <div class="menu-center">SELECT<br>GAME</div>
+
+        <div class="game-tile tile-1" onclick="openGame('tictactoe')">
+            <div class="tile-icon">⭕</div>
+            <div class="tile-title">Tic-Tac-Toe</div>
+        </div>
+        <div class="game-tile tile-2" onclick="openGame('snake')">
+            <div class="tile-icon">🐍</div>
+            <div class="tile-title">Retro Snake</div>
+        </div>
+        <div class="game-tile tile-3" onclick="openGame('snakeladder')">
+            <div class="tile-icon">🪜</div>
+            <div class="tile-title">Snake & Ladder</div>
+        </div>
+        <div class="game-tile tile-4" onclick="openGame('tetris')">
+            <div class="tile-icon">🧱</div>
+            <div class="tile-title">Tetris</div>
+        </div>
+        <div class="game-tile tile-5" onclick="openGame('arkanoid')">
+            <div class="tile-icon">🛸</div>
+            <div class="tile-title">Arkanoid</div>
+        </div>
+    </div>
+
+    <!-- Tic-Tac-Toe -->
+    <div id="tictactoe" class="game-container">
+        <h2>Tic-Tac-Toe</h2>
+        <details class="game-info-text">
+            <summary>📖 How to Play / Rules</summary>
+            <p>Engage in the timeless classic of Tic-Tac-Toe. Two players compete on a 3x3 grid, alternating turns to place their X or O marks. The objective is simple: align three of your symbols vertically, horizontally, or diagonally before your opponent does. If the grid fills up with no winner, it's a tie.</p>
+        </details>
+
+        <div class="ttt-controls">
+            <label>Mode:</label>
+            <select id="ttt-mode" onchange="changeTTTMode()"><option value="2P">2 Player</option><option value="CPU">Vs Computer</option></select>
+            <label id="ttt-diff-label" style="display:none; margin-left:10px;">Level:</label>
+            <select id="ttt-difficulty" style="display:none;" onchange="resetTTT()"><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select>
+        </div>
+
+        <div class="ttt-layout">
+            <div class="ttt-scoreboard">
+                <div class="score-header">🏆 <span>Score</span></div>
+                <div class="score-row"><span class="score-badge x">X</span><span class="score-value x" id="score-x">0</span></div>
+                <div class="score-row"><span class="score-badge tie">TIE</span><span class="score-value tie" id="score-tie">0</span></div>
+                <div class="score-row"><span class="score-badge o">O</span><span class="score-value o" id="score-o">0</span></div>
+            </div>
+
+            <div class="ttt-center">
+                <div class="turn-indicator" id="ttt-turn-indicator">
+                    <span id="turn-icon" class="mark-x">X</span> <span style="color: #aaa; font-weight: normal; font-family: 'Segoe UI', sans-serif;">'s turn</span>
+                </div>
+                <div class="board-container"><div class="board" id="ttt-board"></div></div>
+            </div>
+
+            <div class="ttt-actions">
+                <button class="btn-new-game" onclick="resetTTT()"><span style="font-size: 1.2rem;">↻</span> New Game</button>
+                <button class="btn-reset-all" onclick="resetAllTTT()">Reset All</button>
+                <button class="btn-fullscreen" onclick="toggleFullscreen('tictactoe')">[ &nbsp;] Fullscreen</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ttt-popup" class="modal">
+        <div class="modal-content">
+            <h2 id="ttt-winner-text">Player 1 Wins!</h2>
+            <div class="modal-buttons">
+                <button onclick="closePopupAndReset()">Play Again</button>
+                <button class="exit-btn" onclick="exitTTT()">Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nokia Snake -->
+    <div id="snake" class="game-container">
+        <h2>Retro Snake</h2>
+        <details class="game-info-text">
+            <summary>📖 How to Play / Rules</summary>
+            <h3>Getting Started</h3>
+            <p>Hit <strong>Enter</strong> or click the Start Game button below to immediately launch into the game. No delays, no countdowns!</p>
+            <h3>Gameplay Mechanics & Rules</h3>
+            <ol>
+                <li><strong>Continuous Movement:</strong> The snake cannot be stopped; you are only in charge of steering.</li>
+                <li><strong>Scoring & Growth:</strong> Eating a food block adds 10 points to your score and extends your tail by one segment.</li>
+                <li><strong>Speed Scaling:</strong> Prepare yourself! As you cross specific score thresholds, the snake's speed will noticeably increase.</li>
+                <li><strong>Game Over Conditions:</strong> Colliding with the outer walls or intersecting your own body ends the run immediately.</li>
+            </ol>
+            <h3>Controls</h3>
+            <ul>
+                <li><strong>Arrow Keys / WASD:</strong> Adjust the snake's direction.</li>
+                <li><strong>Enter:</strong> Launch a fresh game.</li>
+                <li><strong>Space / Escape:</strong> Pause and resume the action.</li>
+                <li><strong>M:</strong> Toggle audio effects on or off.</li>
+            </ul>
+        </details>
+
+        <div class="nokia-screen-wrapper" id="nokia-wrapper">
+            <div class="nokia-header">
+                <span>SCORE: <span id="snake-score">0</span></span>
+                <span id="snake-sound-indicator">SND: ON</span>
+                <span>HI: <span id="snake-high">0</span></span>
+            </div>
+            <canvas id="snakeCanvas" width="400" height="400"></canvas>
+            
+            <div style="margin-top: 15px; display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <button id="snake-start-btn" class="start-btn" onclick="startSnake()">Start Game</button>
+                <button class="btn-fullscreen" onclick="toggleFullscreen('snake')" style="margin-top: 15px;">[ &nbsp;] Fullscreen</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="snake-popup" class="modal">
+        <div class="modal-content">
+            <h2 id="snake-winner-text">Game Over!</h2>
+            <div id="snake-leaderboard-entry">
+                <p style="font-family: 'Press Start 2P', monospace; font-size: 0.7rem; color: #fff; line-height: 1.5; margin-bottom: 20px;">Submit your score to the leaderboard!</p>
+                <input type="text" id="snake-player-nickname" minlength="3" maxlength="12" placeholder="Nickname (3-12 chars)" style="width: 80%; text-align: center;"><br>
+                <button onclick="submitSnakeScore()" style="font-family: 'Press Start 2P', monospace; font-size:0.7rem; background-color: var(--secondary); color: #000; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; box-shadow: 0 0 10px var(--secondary); margin-top: 10px;">Submit Score</button>
+            </div>
+            <div id="snake-leaderboard-display" style="display:none; margin-top: 20px; text-align: left; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 5px; border: 1px solid var(--secondary);">
+                <h3 style="margin-top: 0; color: var(--secondary); text-align: center; font-size: 0.7rem; font-family:'Press Start 2P', monospace;">Top 5 High Scores</h3>
+                <ol id="snake-leaderboard-list" style="padding-left: 25px; margin: 0; font-family: 'Press Start 2P', monospace; font-size: 0.6rem; line-height: 2; color:#fff; text-shadow:0 0 5px #fff;"></ol>
+            </div>
+            <div class="modal-buttons">
+                <button onclick="closeSnakePopupAndReset()">Try Again</button>
+                <button class="exit-btn" onclick="exitSnake()">Exit</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Snake and Ladder Game -->
+    <div id="snakeladder" class="game-container">
+        <h2>Snake & Ladder</h2>
+        <details class="game-info-text">
+            <summary>📖 How to Play / Rules</summary>
+            <h3>What is Snake and Ladder Game?</h3>
+            <p>Experience the thrill of Snakes and Ladders! Navigate the 100-square grid by rolling the dice. Land on a ladder to quickly ascend the board, but watch out for snakes that will send you sliding back down. The first player to reach the final square exactly wins the game.</p>
+        </details>
+
+        <div class="sl-layout">
+            <div class="sl-board-section">
+                <div class="sl-header">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h2>Board View</h2>
+                        </div>
+                        <button class="btn-reset-all" style="font-size:1.2rem;" onclick="resetSLGame()">↻</button>
+                    </div>
+                </div>
+                <canvas id="slCanvas" width="400" height="400"></canvas>
+            </div>
+
+            <div class="sl-panel-section">
+                
+                <div class="sl-dice-panel">
+                    <div class="sl-turn-indicator">
+                        <span id="sl-turn-dot" class="sl-dot p1"></span>
+                        <span id="sl-turn-text">Player 1's turn</span>
+                    </div>
+                    
+                    <button class="sl-dice-btn" id="sl-dice-btn" onclick="rollSLDice()">
+                        <div id="sl-dice-face" class="dice-face"></div>
+                    </button>
+                    <div id="sl-dice-status">Roll to start</div>
+                </div>
+
+                <div class="sl-player-cards">
+                    <div class="sl-card active" id="sl-card-0">
+                        <div class="sl-card-header">
+                            <div class="sl-card-title"><span class="sl-dot p1"></span> Player 1</div>
+                            <div class="sl-card-score" id="sl-p1-pos">0</div>
+                        </div>
+                        <div class="sl-progress-bar"><div class="sl-progress-fill p1" id="sl-p1-prog"></div></div>
+                    </div>
+                    
+                    <div class="sl-card" id="sl-card-1">
+                        <div class="sl-card-header">
+                            <div class="sl-card-title"><span class="sl-dot p2"></span> Player 2</div>
+                            <div class="sl-card-score p2" id="sl-p2-pos">0</div>
+                        </div>
+                        <div class="sl-progress-bar"><div class="sl-progress-fill p2" id="sl-p2-prog"></div></div>
+                    </div>
+                </div>
+
+                <div class="sl-actions">
+                    <button class="btn-new-game" onclick="resetSLGame()">
+                        <span style="font-size: 1.2rem;">↻</span> Restart
+                    </button>
+                    <button class="btn-fullscreen" onclick="toggleFullscreen('snakeladder')">
+                        [ &nbsp;] Fullscreen
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div id="sl-popup" class="modal">
+        <div class="modal-content">
+            <h2 id="sl-winner-text">Player 1 Wins!</h2>
+            <div class="modal-buttons">
+                <button onclick="playAgainSL()">Play Again</button>
+                <button class="exit-btn" onclick="closeSLPopup()">Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tetris -->
+    <div id="tetris" class="game-container">
+        <h2>Tetris</h2>
+        
+        <details class="game-info-text">
+            <summary>📖 How to Play / Rules</summary>
+            <h3>Basic Rules</h3>
+            <ul>
+                <li><strong>The Goal:</strong> Prevent the stacking blocks from reaching the very top of the screen.</li>
+                <li><strong>Clearing Lines:</strong> Rotate and move falling pieces to create a solid horizontal line of blocks with no empty spaces. Completed lines disappear, freeing up space and earning you points.</li>
+                <li><strong>Scoring:</strong> Clearing one line gives 100 points, two lines give 300, three lines give 500, and clearing four lines at once with a straight piece (a "Tetris") gives the highest reward.</li>
+                <li><strong>Game Over:</strong> If your stack of blocks reaches the top of the playing field and blocks a new piece from entering, the game ends.</li>
+            </ul>
+            <h3>Standard Controls</h3>
+            <ul>
+                <li><strong>Left/Right Arrow Keys:</strong> Move the piece sideways.</li>
+                <li><strong>Up Arrow:</strong> Rotate the piece.</li>
+                <li><strong>Down Arrow:</strong> Soft drop (make the piece fall faster).</li>
+                <li><strong>Spacebar:</strong> Hard drop (instantly lock the piece in place).</li>
+                <li><strong>C Key:</strong> Hold/swap the current piece into the storage queue for later use.</li>
+            </ul>
+        </details>
+
+        <div class="sl-layout">
+            <div class="sl-board-section">
+                <canvas id="tetrisCanvas" width="240" height="400"></canvas>
+            </div>
+
+            <div class="sl-panel-section">
+                <div class="sl-card active" style="text-align: center;">
+                    <div class="sl-card-header" style="justify-content: center; margin-bottom: 15px;">
+                        <div class="sl-card-title" style="color: var(--primary); font-size: 1.2rem; text-shadow: 0 0 10px var(--primary);">SCORE</div>
+                    </div>
+                    <div class="sl-card-score" id="tetris-score" style="font-size: 2rem; color: #fff; text-shadow: 0 0 10px #fff;">0</div>
+                </div>
+
+                <div class="sl-card" style="text-align: center;">
+                    <div class="sl-card-header" style="justify-content: center; margin-bottom: 15px;">
+                        <div class="sl-card-title" style="color: var(--secondary); font-size: 1rem; text-shadow: 0 0 10px var(--secondary);">HOLD PIECE</div>
+                    </div>
+                    <div style="display: flex; justify-content: center; margin-top: 5px;">
+                        <canvas id="holdCanvas" width="80" height="80"></canvas>
+                    </div>
+                </div>
+
+                <div class="sl-actions" style="margin-top: 10px;">
+                    <button id="tetris-start-btn" class="start-btn" onclick="startTetris()" style="margin-top:0;">Start Game</button>
+                    <button class="btn-fullscreen" onclick="toggleFullscreen('tetris')">[ &nbsp;] Fullscreen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tetris-popup" class="modal">
+        <div class="modal-content">
+            <h2>Tetris Game Over!</h2>
+            <div class="modal-buttons">
+                <button onclick="closeTetrisPopupAndReset()">Try Again</button>
+                <button class="exit-btn" onclick="exitTetris()">Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Arkanoid Ultimate -->
+    <div id="arkanoid" class="game-container">
+        <h2>Arkanoid Ultimate</h2>
+        
+        <details class="game-info-text">
+            <summary>📖 How to Play / Rules</summary>
+            <h3>Basic Rules</h3>
+            <ul>
+                <li><strong>The Goal:</strong> Play Arkanoid by controlling a small paddle called the Vaus to bounce an energy ball and break all the colored blocks on the screen.</li>
+                <li><strong>Move the paddle:</strong> Slide the Vaus left and right at the bottom of the playfield to keep the ball from falling into the bottom pit.</li>
+                <li><strong>Control angles:</strong> Bounce the ball off the edges of the Vaus for sharper angles or the center for shallower bounces to target hard-to-reach bricks.</li>
+                <li><strong>Clear the stage:</strong> Destroy every standard colored brick to advance to the next level. You lose a life if the ball drops past your paddle.</li>
+            </ul>
+            <h3>Power-Up Capsules</h3>
+            <p>Smashing specific blocks releases spinning letter capsules that upgrade your Vaus:</p>
+            <ul>
+                <li><strong style="color:#ffa500;">Orange (S):</strong> Slows down the speed of the energy ball.</li>
+                <li><strong style="color:#ffc0cb;">Pink (P):</strong> Opens a warp escape to advance straight to the next round.</li>
+                <li><strong style="color:#adff2f;">Yellow/Green (C):</strong> Lets you catch the ball on your paddle and release it when ready.</li>
+                <li><strong style="color:#ff0000;">Red (L):</strong> Equips the Vaus with laser firing capabilities to shoot bricks directly.</li>
+                <li><strong style="color:#add8e6;">Light Blue (D):</strong> Splits your single energy ball into three separate particles.</li>
+                <li><strong style="color:#8a2be2;">Dark Blue/Purple (E):</strong> Widens the physical size of the Vaus paddle.</li>
+                <li><strong style="color:#808080;">Grey (B):</strong> Awards an extra life.</li>
+            </ul>
+        </details>
+
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+            <div class="ark-container-wrap">
+                <div id="ark-hud">
+                    <div id="ark-score-display">1UP: 0</div>
+                    <div id="ark-level-display">STAGE: 1</div>
+                    <div id="ark-lives-display">LIVES: 3</div>
+                </div>
+                
+                <div id="ark-level-announcement" class="ark-hidden">STAGE 1</div>
+
+                <canvas id="arkanoidCanvas"></canvas>
+
+                <!-- Start Screen -->
+                <div id="ark-start-screen" class="ark-ui-layer">
+                    <h1>ARKANOID<br>ULTIMATE</h1>
+                    <button id="ark-start-btn" class="ark-btn">▶ PLAY</button>
+                    <div class="ark-controls-hint">Controls: Mouse/Touch or Arrow Keys to Move.<br>Click/Spacebar to Fire/Release.</div>
+                </div>
+
+                <!-- Game Over Screen -->
+                <div id="ark-game-over-screen" class="ark-ui-layer ark-hidden">
+                    <h1 style="color: #f00; text-shadow: 0 0 10px #f00, 0 0 20px #f00;">GAME OVER</h1>
+                    <p id="ark-final-score" style="font-family: 'Press Start 2P', monospace; font-size: 0.8rem; color: #fff;">SCORE: 0</p>
+                    <div class="modal-buttons" style="margin-top: 10px;">
+                        <button id="ark-restart-btn" class="ark-btn">CONTINUE?</button>
+                        <button class="ark-btn exit-btn" onclick="exitArkanoid()">EXIT</button>
+                    </div>
+                </div>
+
+                <!-- Victory Screen -->
+                <div id="ark-victory-screen" class="ark-ui-layer ark-hidden">
+                    <h1 style="color: #0f0; text-shadow: 0 0 10px #0f0, 0 0 20px #0f0;">DOH DEFEATED</h1>
+                    <p style="font-family: 'Press Start 2P', monospace; font-size: 0.6rem;">The system is restored.</p>
+                    <p id="ark-victory-score" style="font-family: 'Press Start 2P', monospace; font-size: 0.8rem; color: #fff;">FINAL SCORE: 0</p>
+                    <div class="modal-buttons" style="margin-top: 10px;">
+                        <button id="ark-next-level-btn" class="ark-btn">PLAY AGAIN</button>
+                        <button class="ark-btn exit-btn" onclick="exitArkanoid()">EXIT</button>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn-fullscreen" onclick="toggleFullscreen('arkanoid')" style="margin-top: 5px;">[ &nbsp;] Fullscreen</button>
+        </div>
+    </div>
+
+
+    <div id="settings-modal" class="modal" onclick="if(event.target===this)closeSettings()">
+        <div class="modal-content settings-panel" role="dialog" aria-label="Settings">
+            <h2>Settings</h2>
+            <div class="set-group"><h3>Sound</h3>
+                <label class="set-row"><span>Sound effects</span><input type="checkbox" id="set-sound"></label>
+                <label class="set-row"><span>Volume</span><input type="range" id="set-volume" min="0" max="100" step="5"></label>
+            </div>
+            <div class="set-group"><h3>Display</h3>
+                <label class="set-row"><span>Theme</span><select id="set-theme"><option value="synthwave">Synthwave</option><option value="sunset">Arcade sunset</option><option value="ice">Cyber ice</option><option value="terminal">Terminal</option></select></label>
+                <label class="set-row"><span>Scanlines</span><input type="checkbox" id="set-scanlines"></label>
+                <label class="set-row"><span>Reduce animation</span><input type="checkbox" id="set-motion"></label>
+            </div>
+            <div class="set-group"><h3>Games</h3>
+                <label class="set-row"><span>Tic-Tac-Toe mode</span><select id="set-ttt-mode"><option value="2P">2 Player</option><option value="CPU">Vs Computer</option></select></label>
+                <label class="set-row"><span>Computer level</span><select id="set-ttt-level"><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select></label>
+                <label class="set-row"><span>Snake speed</span><select id="set-snake-speed"><option value="slow">Slow</option><option value="normal">Normal</option><option value="fast">Fast</option></select></label>
+                <label class="set-row"><span>Snake wraps around walls</span><input type="checkbox" id="set-snake-wrap"></label>
+                <label class="set-row"><span>Tetris start speed</span><select id="set-tetris-speed"><option value="slow">Slow</option><option value="normal">Normal</option><option value="fast">Fast</option></select></label>
+                <label class="set-row"><span>Arkanoid lives</span><select id="set-ark-lives"><option value="3">3</option><option value="5">5</option><option value="7">7</option></select></label>
+            </div>
+            <div class="set-group"><h3>Data</h3>
+                <div class="set-row"><button class="set-btn" onclick="clearSnakeScores()">Clear Snake scores</button><button class="set-btn" onclick="resetSettings()">Reset settings</button></div>
+            </div>
+            <div class="modal-buttons"><button onclick="closeSettings()">Done</button></div>
+        </div>
+    </div>
+
+        <script src="script.js"></script>
+</body>
+</html>
